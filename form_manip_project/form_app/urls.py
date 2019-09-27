@@ -6,4 +6,5 @@ urlpatterns = [
     path('inscription',views.inscription, name="inscription"),
     path('connexion',views.connexion, name="connexion"),
     path('dashboard',views.dashboard, name="dashboard"),
+    path('deconnection',views.deconection,name='deconection'),
 ]
