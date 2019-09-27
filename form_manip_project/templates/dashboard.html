@@ -69,7 +69,19 @@
                 </div>
                 <div class="col col-md-8">
                     <div class="card">
+                        <div class="card-header">
+                            Liste des videos
+                        </div>
                         <div class="card-body">
+                            {% if titre and videos.paginator.count > 0 %}
+                                <div class="alert alert-success" role="alert">
+                                    recherche :"{{ titre }}" nombre de resultats : {{ videos.paginator.count }}
+                                </div>
+                            {% elif titre and videos.paginator.count == 0 %}
+                                <div class="alert alert-danger" role="alert">
+                                    recherche :"{{ titre }}" nombre de resultats : {{ videos.paginator.count }}
+                                </div>
+                            {% endif %}
                             <div class="row">
                                 {% for video in videos %}
                                     <div class="col col-md-6">
@@ -78,7 +90,6 @@
                                                 src="{{ video.lien }}">
                                                 </iframe>
                                             <h5>{{ video.titre }}</h5>
-                                            <p>{{ video.lien }}</p>
                                         </div>
                                     </div>
                                 {% endfor %}

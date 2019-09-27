@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+import json
+import requests
 from . import models
 # Create your views here.
 def connexion(request):
@@ -82,6 +84,7 @@ def dashboard(request):
     data = {
         'user': request.user,
         'videos': vi,
+        'titre': titre,
     }
     return render(request, 'dashboard.html', data)
 
@@ -89,3 +92,16 @@ def dashboard(request):
 def deconection(request):
     logout(request)
     return redirect('connection')
+
+def fake(request):
+    # video = requests.get('https://api.youtubemultidownloader.com/playlist?url=https://www.youtube.com/playlist?list=PL6szNsef4d4IHh4NBJKjTuMn-YNEwlOIp')
+    # test = json.loads(video.text)
+    # print(test)
+    # for i in test['items']:
+    #     youtube = models.Y_Video(
+    #         titre =i['title'],
+    #         lien = i['preview'],
+    #     )
+    #     youtube.save()
+
+    return render(request, 'connexion.html')

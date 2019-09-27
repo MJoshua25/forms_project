@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/dashboard/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>
+            </li>
+            
+            </ul>
+            <form class="form-inline my-2 my-lg-0" action="{% url 'dashboard' %} ">
+            <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+        </nav>
+
+
+        <div class="container-fluid mt-3">
+            <div class="row">
+                <div class="col col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="text-center">
+                                    <img src="{{ request.user.profile.image.url }}" alt="" class="rounded-circle">
+                                    <p>nom:{{ request.user.first_name }} </p>
+                                    <p>prenom:{{ request.user.last_name }}</p>
+                                    <p>email:{{ request.user.email }}</p>
+                                    <p>username:{{ request.user.username }}</p>
+                                    <p>contact:{{ request.user.profile.contacts }}</p>
+                                    <a href="{% url 'deconection' %}" class="btn btn-danger">deconnexion</a>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-md-8">
+                    {% if query  and videos.paginator.count > 0 %}
+                        <div class="alert alert-success" role="alert">
+                            recherche :"{{ query }}" nombre de resultats : {{ videos.paginator.count }}
+                        </div>
+                    {% elif query and videos.paginator.count == 0 %}
+                        <div class="alert alert-danger" role="alert">
+                            recherche :"{{ query }}" nombre de resultats : {{ videos.paginator.count }}
+                        </div>
+                    {% endif %}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                {% for vid in videos %}
+                                <div class="col col-md-6">
+                                    <div class="text-center">
+                                            <iframe width="420" height="315"
+                                            src="{{ vid.url }}">
+                                            </iframe>
+                                        <h5>{{ vid.titre }}</h5>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!--Pagination-->
+                        <nav class="d-flex justify-content-center wow fadeIn">
+                            <ul class="pagination pg-blue">
+                                
+                                <!--Arrow left-->
+                                {% if videos.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ videos.previous_page_number }}" aria-label="Previous">
+                                        <span aria-hidden="true">Previous</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+
+                                
+                                {% for i in videos.paginator.page_range %}
+                                
+                                {% if videos.number == i %}
+                                <li class="page-item active">
+                                    <a class="page-link" href="?page={{ i }}">{{ i }}
+                                        <span class="sr-only">(current)</span>
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li class="page-item">
+                                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                                {% endfor %}
+                                {% if videos.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ videos.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true">Next</span>
+                                    </a>
+                                </li>
+                                
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ videos.paginator.num_pages }}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        <!--Pagination-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="/static/dashboard/js/jquery-3.4.1.min.js" ></script>
+    <script src="/static/dashboard/js/popper.min.js" ></script>
+    <script src="/static/dashboard/js/bootstrap.min.js" ></script>
+</body>
+</html>
